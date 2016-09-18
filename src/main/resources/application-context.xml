@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- import classpath cxf -->
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+
+	<context:component-scan base-package="com.jaxrs.cxf.rest" />
+
+
+	<!-- rest client -->
+	<bean id="clientJsonProvider" class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"></bean>
+
+	<util:list id="clientWebClientProviders">
+		<ref bean="clientJsonProvider" />
+	</util:list>
+
+	<bean id="employeeService" class="org.apache.cxf.jaxrs.client.WebClient" factory-method="create">
+		<constructor-arg type="java.lang.String" value="http://localhost:9999/EmployeeService/rest" />
+		<constructor-arg ref="clientWebClientProviders" />
+	</bean>
+	<!-- rest client END -->
+</beans>
